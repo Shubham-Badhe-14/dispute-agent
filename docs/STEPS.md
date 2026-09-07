@@ -3,7 +3,7 @@
 This document tracks our progress through the dependency-driven build order. Update the status of each step as we progress.
 
 - [x] **Step 1: Data layer** — synthetic transaction generator + SQLite schema.
-- [ ] **Step 2: SQL tool + intake agent** — test standalone.
+- [x] **Step 2: SQL tool + intake agent** — test standalone.
 - [ ] **Step 3: Policy corpus + RAG tool + retriever agent** — write policy docs, test retrieval quality manually.
 - [ ] **Step 4: Analyst agent** — combine intake + retrieval, produce a decision.
 - [ ] **Step 5: Fraud scorer tool** — train a small classical model on synthetic features, wire in as a tool.

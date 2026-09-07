@@ -8,7 +8,9 @@ fake = Faker()
 Faker.seed(42)
 random.seed(42)
 
-DB_PATH = 'transactions.db'
+import os
+
+DB_PATH = os.path.join(os.path.dirname(__file__), 'transactions.db')
 
 # Standard MCC Codes
 MCC_CATEGORIES = [

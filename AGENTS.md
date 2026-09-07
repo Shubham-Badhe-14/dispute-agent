@@ -6,7 +6,7 @@ Welcome, future Agent! This project follows a strict dependency-driven build ord
 - Follow the sequence in `STEPS.md` and `MASTER_BUILD_PLAN.md`. DO NOT skip ahead.
 - Build and test each numbered step standalone before wiring it into the broader LangGraph or system.
 - Ensure that you don't add new dependencies without checking or flagging it first. Keep the stack constrained (LangGraph, FastAPI, Langfuse, RAGAS, SQLite, etc.).
-- Update `STEPS.md` and `CHANGELOG.md` as you complete significant milestones.
+- Update `docs/STEPS.md` and `docs/CHANGELOG.md` as you complete significant milestones.
 
 ## 2. Git and Version Control
 - We commit and push code iteratively per step, rather than in giant dumps.
@@ -24,5 +24,5 @@ Welcome, future Agent! This project follows a strict dependency-driven build ord
 - **Compatibility Check**: After completing a component, verify how it integrates with the rest of the application (e.g., checking data schemas against downstream agent expectations).
 
 ## 4. Continuity
-- Before starting your task, read `MASTER_BUILD_PLAN.md`, `STEPS.md`, and `CHANGELOG.md` to get context on what has been done and what needs to be done next.
-- Always document major decisions in `CHANGELOG.md`.
+- Before starting your task, read `docs/MASTER_BUILD_PLAN.md`, `docs/STEPS.md`, and `docs/CHANGELOG.md` to get context on what has been done and what needs to be done next.
+- Always document major decisions in `docs/CHANGELOG.md`.

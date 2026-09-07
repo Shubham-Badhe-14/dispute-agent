@@ -7,6 +7,7 @@ This file tracks all major architectural decisions, completed steps, and signifi
 - Defined `MASTER_BUILD_PLAN.md`, `STEPS.md`, and `AGENTS.md` to guide the dependency-driven build.
 
 - Completed **Step 1**: Data layer (Synthetic transaction generator + SQLite schema) with edge cases and separated users table.
+- Completed **Step 2**: SQL tool (LangChain `@tool`, parameterized, explicit columns) and Intake Agent (short-circuiting logic on failure).
 
 ### Pending
-- **Step 2**: SQL tool + intake agent — test standalone.
+- **Step 3**: Policy corpus + RAG tool + retriever agent — write policy docs, test retrieval quality manually.
