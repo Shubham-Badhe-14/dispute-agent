@@ -1,0 +1,21 @@
+# Virtual Environments
+venv/
+env/
+.env
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Databases
+*.db
+*.sqlite3
+
+# IDE / OS
+.DS_Store
+.vscode/
+.idea/
+
+# Langfuse / Tracing
+langfuse.log
