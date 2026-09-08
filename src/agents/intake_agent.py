@@ -4,7 +4,7 @@ import os
 # Add src to the path for standalone execution
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from src.agents.graph import AgentState
+from src.agents.state import AgentState
 from src.tools.sql_tool import get_transaction_details
 
 def intake_node(state: AgentState) -> dict:

@@ -1,3 +1,12 @@
 Faker==24.4.0
 langchain-core
 langgraph
+chromadb
+sentence-transformers
+langchain-community
+langchain-huggingface
+langchain-google-genai
+# langchain-openai
+# langchain-anthropic
+langchain
+python-dotenv

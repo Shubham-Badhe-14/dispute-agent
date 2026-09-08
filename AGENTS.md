@@ -18,6 +18,10 @@ Welcome, future Agent! This project follows a strict dependency-driven build ord
   ```
 - Make sure to initialize the repo if it hasn't been already: `git init`, `git branch -M main`.
 
+## 3. LLM Configuration
+- NEVER instantiate a provider-specific Chat class (e.g., `ChatOpenAI`, `ChatGoogleGenerativeAI`) directly in any agent file.
+- All LLM calls must go through `config.get_llm()`, which handles provider-agnostic initialization via `init_chat_model` and environment variables (`LLM_PROVIDER`, `LLM_MODEL`).
+
 ## 3. Testing and Verification
 - **Standalone Testing**: For every new module (e.g., the SQL tool, the RAG tool), write a quick script or provide the terminal command to verify its functionality independently.
 - If you cannot run the tests automatically, provide the user with clear instructions and commands to execute the tests.
