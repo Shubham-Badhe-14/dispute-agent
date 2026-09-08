@@ -2,6 +2,7 @@ import os
 import joblib
 import pandas as pd
 from langchain_core.tools import tool
+from langfuse import observe
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 MODEL_PATH = os.path.join(BASE_DIR, 'src', 'tools', 'fraud_model.pkl')
@@ -17,6 +18,7 @@ def get_model():
     return _model
 
 @tool
+@observe()
 def score_fraud(amount: float, card_present: bool, transaction_country: str, home_country: str) -> float:
     """
     Score a transaction for fraud. 
@@ -24,6 +26,7 @@ def score_fraud(amount: float, card_present: bool, transaction_country: str, hom
     Returns a probability score between 0.0 and 1.0.
     """
     model = get_model()
+    
     country_match = int(transaction_country == home_country)
     
     # Model features: ['amount', 'card_present', 'country_match']

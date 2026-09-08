@@ -1,28 +1,20 @@
 # Resume State
 
-When you resume tomorrow, you are in the middle of executing **Step 3 (Policy corpus + RAG tool + retriever agent)**.
+When you resume tomorrow, you are in the middle of executing **Step 10 (Eval harness)**.
 
-## What has been done so far:
-- Created the policy markdown files in `data/policies/` with proper header structures.
-- Updated `requirements.txt` with `chromadb`, `sentence-transformers`, `langchain-community`, and `langchain-huggingface`.
-- Built `src/tools/build_index.py` which chunks the markdown by headers, extracts exact match metadata, and generates embeddings.
-- Built `src/tools/rag_tool.py` which searches ChromaDB by exact metadata first, and falls back to semantic search with a threshold.
-- Built `src/agents/retriever_agent.py` to interact with the RAG tool.
+## What has been done so far (Step 10):
+- **Model Fix:** Configured `get_llm()` in `src/config.py` to correctly use `gemini-2.0-flash`.
+- **Dynamic Throttle:** Implemented parsing logic in `src/eval/judge_eval.py` to extract the exact `retry_after` delay from Gemini's `429 RESOURCE_EXHAUSTED` responses and sleep accordingly + 2 seconds to prevent rate limit crashing.
+- **RAGAS:** Safely installed `ragas` and `datasets` to the virtual environment.
+- **Eval Cases Mapping:** Attempted to map 15 handcrafted, nuanced edge-cases to real `transaction_id`s in the SQLite database via `scratch/match_cases.py`. 
+- **Mapping Failure:** The synthetic `transactions.db` did not possess exactly matching rows for 8 of the nuanced edge cases (e.g., dropping `country_match` checks). The resulting mapped cases lost their intended logic completely.
 
 ## What is left to do:
-1. **Re-run the dependency installation**. The pip install (specifically the heavy `torch` and CUDA libraries) was forcefully stopped. You need to run:
+1. **Inject Edge Cases into DB:** Write a quick script to generate and insert 8 perfectly matching synthetic rows into `data/transactions.db` for the dropped constraint cases (Cases 6, 7, 9, 10, 11, 12, 13, 15).
+2. **Re-Run Mapping:** Once inserted, run `python scratch/match_cases.py` again to generate the flawless `data/eval/agent_eval_cases.jsonl`.
+3. **Execute the Eval Harness:** Run the throttled harness across the new 15 cases.
    ```bash
    source venv/bin/activate
-   pip install -r requirements.txt
+   python src/eval/judge_eval.py
    ```
-2. **Build the Vector Index**. Once dependencies are installed, generate the local ChromaDB by running:
-   ```bash
-   source venv/bin/activate
-   python src/tools/build_index.py
-   ```
-3. **Verify the Retriever Agent**. Run the standalone verification tests:
-   ```bash
-   source venv/bin/activate
-   python src/agents/retriever_agent.py
-   ```
-4. **Finalize Step 3**. If the verification tests pass (checking both the exact match happy path and the negative semantic fallback path), commit the changes, mark Step 3 complete in `docs/STEPS.md`, and update `docs/CHANGELOG.md`.
+4. **Move to Step 11:** Once the evaluation completes successfully, finalize Step 10 and move on to Step 11 (FastAPI wrapper).

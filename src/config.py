@@ -6,5 +6,5 @@ load_dotenv()
 
 def get_llm():
     provider = os.getenv("LLM_PROVIDER", "google_genai")
-    model = os.getenv("LLM_MODEL", "gemini-3.6-flash")
-    return init_chat_model(model, model_provider=provider)
+    model = os.getenv("LLM_MODEL", "gemini-2.0-flash")
+    return init_chat_model(model, model_provider=provider, max_retries=5)
