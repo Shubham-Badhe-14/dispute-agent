@@ -41,6 +41,28 @@ def should_continue_after_score(state: AgentState) -> str:
         return END
     return "retrieve"
 
+from src.agents.compliance_agent import compliance_node
+from src.agents.human_review_agent import human_review_node
+from langgraph.checkpoint.memory import MemorySaver
+
+def should_continue_after_compliance(state: AgentState) -> str:
+    """
+    Conditional routing after compliance check.
+    If pass -> END
+    If fail & retry_count < 1 -> analyze
+    If fail & retry_count >= 1 -> human_review
+    """
+    verdict = state.get("compliance_verdict")
+    needs_human = state.get("needs_human_review", False)
+    
+    if verdict == "pass":
+        return END
+    
+    if verdict == "fail" and not needs_human:
+        return "analyze"
+        
+    return "human_review"
+
 # Build the LangGraph
 builder = StateGraph(AgentState)
 
@@ -49,6 +71,8 @@ builder.add_node("intake", intake_node)
 builder.add_node("score_fraud", fraud_scorer_node)
 builder.add_node("retrieve", retriever_node)
 builder.add_node("analyze", analyst_node)
+builder.add_node("compliance", compliance_node)
+builder.add_node("human_review", human_review_node)
 
 # Define edges
 builder.add_edge(START, "intake")
@@ -59,12 +83,21 @@ builder.add_conditional_edges("intake", should_continue_after_intake)
 # score_fraud -> retrieve
 builder.add_conditional_edges("score_fraud", should_continue_after_score)
 
-# retrieve -> analyze -> END
+# retrieve -> analyze
 builder.add_edge("retrieve", "analyze")
-builder.add_edge("analyze", END)
 
-# Compile graph
-graph = builder.compile()
+# analyze -> compliance
+builder.add_edge("analyze", "compliance")
+
+# compliance -> conditional
+builder.add_conditional_edges("compliance", should_continue_after_compliance)
+
+# human_review -> END
+builder.add_edge("human_review", END)
+
+# Compile graph with a checkpointer and pause right before human_review
+memory = MemorySaver()
+graph = builder.compile(checkpointer=memory, interrupt_before=["human_review"])
 
 if __name__ == "__main__":
     import os

@@ -11,3 +11,5 @@ class AgentState(TypedDict, total=False):
     needs_human_review: bool
     final_output: str
     error: str
+    retry_count: int
+    compliance_feedback: str

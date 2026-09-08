@@ -28,11 +28,16 @@ def analyst_node(state: AgentState) -> dict:
     transaction_data = state.get("transaction_data", {})
     fraud_score = state.get("fraud_score", 0.0)
     policies = state.get("retrieved_policy_chunks", [])
+    compliance_feedback = state.get("compliance_feedback", None)
     
     policy_text = "\n\n".join(policies)
     
+    system_prompt = "You are a specialized fraud and dispute resolution analyst. Your job is to review transactions against policies and make a structured decision."
+    if compliance_feedback:
+        system_prompt += f"\n\nCRITICAL FEEDBACK ON PREVIOUS DECISION: Your previous reasoning was flagged by the compliance team for the following reason: '{compliance_feedback}'. Revise your decision and reasoning accordingly to address this issue."
+    
     prompt = ChatPromptTemplate.from_messages([
-        ("system", "You are a specialized fraud and dispute resolution analyst. Your job is to review transactions against policies and make a structured decision."),
+        ("system", system_prompt),
         ("user", "Transaction Details: {tx_data}\nFraud Score (0.0 to 1.0): {score}\n\nRelevant Policies:\n{policy}\n\nPlease analyze and provide your decision.")
     ])
     
